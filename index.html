@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<title>JLC's Portfolio</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="darkreader-lock">
+<link rel="stylesheet" href="theme.css">
+
+<script type="module" src="misc/matrix-digital-rain.js"></script>
+<script type="module" src="main.js"></script>
+
+<!-- Did you know that valid HTML5 doesn't really need a head or a body? 😎 -->
+
+<button id="btn_lightSwitch" tabindex="-1"></button>
+
+<div id="container">
+  <matrix-digital-rain></matrix-digital-rain>
+
+  <main>
+    <h1>JLC's Portfolio Thing</h1> 
+
+    <nav class="main">
+      <matrix-digital-rain config="loopPause: 1000, 10000; color: 0,255,0; spawnDelay: 100, 1000">
+        <ul id="nav"></ul>
+      </matrix-digital-rain>
+    </nav>
+  
+    <div id="page"></div>
+
+    <footer class="no-print">
+      Copyright ©️ 2023 Joakim L. Christiansen.
+    </footer>
+  </main>
+
+  <matrix-digital-rain></matrix-digital-rain>
+</div>
