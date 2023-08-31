@@ -3,7 +3,7 @@
 
 You're not really meant to read this readme.
 
-[Go here to see my "portfolio thing" website instead!]()
+[Go here to see my "portfolio thing" website instead!](https://joakimch.github.io/jlc-portfolio-thing/)
 
 Feel free to check out the html/css/js though...
 
