@@ -45,15 +45,29 @@
     if (scriptPath) { // has a script
       script = document.createElement('script')
       script.type = 'module'
-      if (!scriptContent) { // if not cached
-        scriptContent = await (await fetch(scriptPath)).text()
-        page.scriptContent = scriptContent
+      try {
+        if (!scriptContent) { // if not cached
+          const response = await fetch(scriptPath)
+          if (!response.ok) throw Error('Response not OK, got code: '+response.status)
+          scriptContent = await response.text()
+          page.scriptContent = scriptContent
+        }
+        script.innerHTML = scriptContent
+      } catch (error) {
+        console.error(error)
+        script = null
       }
-      script.innerHTML = scriptContent
     }
-    if (!htmlContent) {
-      htmlContent = await (await fetch(htmlPath)).text()
-      page.htmlContent = htmlContent
+    try {
+      if (!htmlContent) {
+        const response = await fetch(htmlPath)
+        if (!response.ok) throw Error('Response not OK, got code: '+response.status)
+        htmlContent = await response.text()
+        page.htmlContent = htmlContent
+      }
+    } catch (error) {
+      console.error(error)
+      htmlContent = `<h2>Something Went Wrong</h2><p>${error}</p>`
     }
     el_page.innerHTML = htmlContent // (replaces any previous content)
     if (script) el_page.append(script) // executes it
