@@ -2,6 +2,7 @@
 /* https://www.w3.org/TR/css-nesting-1/#nest-selector */
 
 :root {
+  --color-scheme: dark;
   --back: rgb(18, 18, 18);
   --back-rgb: 18, 18, 18;
   --text: rgb(202, 202, 202);
@@ -10,17 +11,20 @@
   --strongAlpha: rgba(255, 255, 255, 0.5);
   --green: rgb(0, 200, 0);
   &.light { /* light theme colors */
+    --color-scheme: light;
     --back: rgba(238, 238, 238, 0.89);
     --text: rgb(70, 70, 70);
     --header: rgb(0, 0, 0);
     --weakAlpha: rgba(0, 0, 0, 0.15);
     --strongAlpha: rgba(0, 0, 0, 0.2);
   }
+  color-scheme: var(--color-scheme); /* this is bloody cool! */
   color: var(--text);
   background-color: var(--back);
   font-family: Arial, sans-serif;
   font-size: 18px;
   overflow-x: hidden; /* no horizontal scroll */
+  overflow-y: scroll; /* always vertical scroll */
 }
 
 @media print { /* some very sane defaults for printing */
@@ -112,16 +116,21 @@ button {
 /* the main container */
 #container {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: 1fr minmax(0, 810px) 1fr;
 }
 
 #container > main {
-  max-width: 810px;
+  min-height: 100vh;
   padding: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
   & h1 {margin-top: 20px}
+}
+
+#page {
+  height: 100%;
+  width: 100%;
 }
 
 nav.main {
@@ -144,11 +153,11 @@ nav.main {
     user-select: none;
     padding: 10px 20px;
     transition: all 0.4s;
-    &:hover {
+    &:hover:not(.selected) {
       cursor: pointer;
       text-shadow: 0 0 15px rgb(0, 255, 34);
     }
-    &:active {
+    &:active:not(.selected) {
       transform: translateY(2px);
       transition: none;
     }
@@ -167,6 +176,11 @@ nav.main {
       margin: 5px;
       background-color: rgba(var(--back-rgb), 0.8);
       border-radius: 20px;
+      &.selected {
+        background-color: rgba(8, 65, 0, 0.8);
+        box-shadow: 0 0 10px rgba(0, 255, 34, 0.719), inset 0 0 10px rgba(0, 255, 34, 0.719);
+        /* background-color: inherit; */
+      }
     }
   }
 }

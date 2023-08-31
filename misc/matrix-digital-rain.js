@@ -213,6 +213,7 @@ const DEFAULT_CONFIG = { // default config
   zIndex: -1,
   minWidth: 10,
   minHeight: 100,
+  resizeDelay: false // without it consider making backgrounds of nearby "container elements" not transparent
 }
 
 /** A tag function to remove indents from template literals. */
@@ -339,17 +340,18 @@ class MatrixDigitalRain extends HTMLElement {
     this.#active = (this.clientWidth >= this.#config.minWidth 
                 && this.clientHeight >= this.#config.minHeight)
     this.#canvas.hidden = !this.#active
-    this.#canvas.style.width = this.clientWidth+'px'
-    this.#canvas.style.height = this.clientHeight+'px'
+    // this.#canvas.style.width = this.clientWidth+'px'
+    // this.#canvas.style.height = this.clientHeight+'px'
 
     if (this.#canvas.width != this.clientWidth || this.#canvas.height != this.clientHeight) { // if resized
-      clearTimeout(this.#resizeTimeout)
-      if (Date.now() - this.#timeLastResize < 500) {
-        this.#resizeTimeout = setTimeout(this.#canvasMatchSize.bind(this), 100)
-        return // avoid banging of get/putImageData
+      if (this.#config.resizeDelay) {
+        clearTimeout(this.#resizeTimeout)
+        if (Date.now() - this.#timeLastResize < this.#config.resizeDelay) {
+          this.#resizeTimeout = setTimeout(this.#canvasMatchSize.bind(this), 100)
+          return // avoid banging of get/putImageData
+        }
+        this.#timeLastResize = Date.now()
       }
-
-      this.#timeLastResize = Date.now()
 
       const numColumns = Math.trunc(this.clientWidth / this.#config.charWidth)
       while (this.#fallingStarCols.length > numColumns) {

@@ -23,22 +23,25 @@
     projects: {title: 'My projects'},
     featured: {title: 'I\'m featured here'}
   }
-  for (const page of Object.values(pages)) {
+  for (const [pageKey, page] of Object.entries(pages)) {
     const listItem = document.createElement('li')
     const link = document.createElement('a')
     page.el_link = link
-    link.addEventListener('click', () => loadPage(page))
+    link.addEventListener('click', () => loadPage(pageKey))
     link.textContent = page.title
     listItem.append(link)
     el_nav.append(listItem)
   }
   let currentPage
-  loadPage(pages.intro)
-
-  async function loadPage(page) {
-    if (currentPage == page) return
+  loadPage(window.location.hash.slice(1) || 'intro')
+  
+  async function loadPage(pageKey) {
+    if (!(pageKey in pages)) pageKey = 'intro'
+    const page = pages[pageKey]
+    if (!page || currentPage == page) return
     if (currentPage) currentPage.el_link.classList.remove('selected')
     currentPage = page
+    window.location.hash = pageKey
     page.el_link.classList.add('selected')
     let {htmlPath, scriptPath, htmlContent, scriptContent} = page
     let script
@@ -67,7 +70,7 @@
       }
     } catch (error) {
       console.error(error)
-      htmlContent = `<h2>Something Went Wrong</h2><p>${error}</p>`
+      htmlContent = `<article><h2>Something Went Wrong</h2><p>${error}</p></article>`
     }
     el_page.innerHTML = htmlContent // (replaces any previous content)
     if (script) el_page.append(script) // executes it
